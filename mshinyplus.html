@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSHINY</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    height: 100%;
+    width: 100%;
+  }
+  #android-msg {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #000000;
+    display: none;
+  }
+  #fallback-link {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #000000;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="android-msg">not on android yet sorry......</div>
+
+<!-- Shown only if the automatic JS redirect below gets blocked (common in the Instagram in-app browser) -->
+<a id="fallback-link" href="https://apps.apple.com/us/app/mshiny/id6796403697">Tap here to open the App Store</a>
+
+<script>
+  (function () {
+    var ua = navigator.userAgent || navigator.vendor || window.opera || "";
+    var isAndroid = /android/i.test(ua);
+    var isIOS = /iPhone|iPod|iPad/.test(ua);
+    var appStoreURL = "https://apps.apple.com/us/app/mshiny/id6796403697";
+
+    if (isAndroid) {
+      document.getElementById("android-msg").style.display = "block";
+      return;
+    }
+
+    // Not Android (iPhone, iPad, desktop, or anything else) -> send to the App Store.
+    document.getElementById("fallback-link").style.display = "block";
+    window.location.replace(appStoreURL);
+  })();
+</script>
+
+</body>
+</html>
