@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSHINY</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    height: 100%;
+    width: 100%;
+  }
+  #android-msg {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #000000;
+    display: none;
+  }
+  #ios-fallback {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #000000;
+    display: none;
+  }
+  #ios-fallback a {
+    display: inline-block;
+    color: #000000;
+    text-decoration: underline;
+    margin-bottom: 10px;
+  }
+  #ios-fallback p {
+    font-size: 14px;
+    color: #444444;
+    margin: 8px 0 0 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="android-msg">not on android yet sorry......</div>
+
+<!-- Shown only if the automatic redirect doesn't fire fast enough (e.g. blocked by an in-app browser) -->
+<div id="ios-fallback">
+  <a id="fallback-link" href="#">Tap here to open the App Store</a>
+  <p>If that doesn't work: tap the ••• (or Aa) icon in the top right corner and choose "Open in Safari" / "Open in external browser", then try the link again.</p>
+</div>
+
+<script>
+  (function () {
+    var ua = navigator.userAgent || navigator.vendor || window.opera || "";
+    var isAndroid = /android/i.test(ua);
+    var isIOS = /iPhone|iPod|iPad/.test(ua);
+
+    var appStoreURL = "https://apps.apple.com/us/app/mshiny/id6796403697";
+    // x-safari-https forces iOS to hand the navigation off to real Safari instead of
+    // letting the current in-app browser (Instagram, etc.) handle it directly.
+    // In-app browsers frequently block direct navigation to apps.apple.com, but generally
+    // allow this scheme since it's an explicit "leave this app" request.
+    var safariEscapeURL = appStoreURL.replace(/^https:\/\//, "x-safari-https://");
+
+    if (isAndroid) {
+      document.getElementById("android-msg").style.display = "block";
+      return;
+    }
+
+    if (isIOS) {
+      var link = document.getElementById("fallback-link");
+      link.href = safariEscapeURL;
+
+      // Try the escape-to-Safari trick first, immediately.
+      window.location.href = safariEscapeURL;
+
+      // If we're still here after a beat, the auto-redirect got blocked (or the user is on
+      // a version of the in-app browser that doesn't honor the scheme) -- reveal the manual
+      // fallback link + instructions instead of leaving a blank page.
+      setTimeout(function () {
+        document.getElementById("ios-fallback").style.display = "block";
+      }, 700);
+      return;
+    }
+
+    // Not Android, not iOS (desktop, etc.) -> plain redirect.
+    window.location.replace(appStoreURL);
+  })();
+</script>
+
+</body>
+</html>
